@@ -13,9 +13,7 @@ import java.time.format.DateTimeFormatter;
 
 
 
-public class Credit //класс контроллер - приём запроса от пользователя;анализ запроса; выбор следующего действия системы, соответственно результатам анализа 
-//(например, передача запроса другим элементам системы).
-{
+public class Credit {
     int id_client;
     int size;
     int percent;
@@ -41,10 +39,13 @@ public class Credit //класс контроллер - приём запроса от пользователя;анализ за
            NewCred.typeOfPayment= StrInArray[4].charAt(0);
            NewCred.term = Integer.parseInt(StrInArray[5]);
            NewCred.termOfFirstPayment = StrInArray[6];
-           //        
-           //DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy", Locale.ENGLISH);
-           //LocalDate date = LocalDate.parse(NewCred.termOfFirstPayment, formatter);
-           //System.out.println(date); // 2010-01-02
+                   
+           DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy", Locale.ENGLISH);
+           LocalDate date = LocalDate.parse(NewCred.termOfFirstPayment, formatter);
+           System.out.println(date); // 2010-01-02
+    
+
+           prn(NewCred.percent);
            
        }    
 
@@ -58,10 +59,4 @@ public class Credit //класс контроллер - приём запроса от пользователя;анализ за
             System.out.println(nc);
 
        }
-
-       public class Model //Мodel. В него передаем как обьект данные по кредиту для проведения расчета
-       {
-           
-       }
-
     }
