@@ -1,4 +1,4 @@
-package credcalc;
+package creditcalc;
 
 import java.util.*;
 import java.util.Date;
@@ -9,9 +9,10 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.nio.*;
 
 
-
+//---------------------------Controller Begin ------------------------------
 
 public class Credit //класс контроллер - приём запроса от пользователя;анализ запроса; выбор следующего действия системы, соответственно результатам анализа 
 //(например, передача запроса другим элементам системы).
@@ -27,24 +28,7 @@ public class Credit //класс контроллер - приём запроса от пользователя;анализ за
     
     public static void main(String[] args) throws IOException, ParseException
        {
-           File input = new File("input3.csv");
-           Scanner sc = new Scanner(input);
-           String StrIn = sc.nextLine();
-           StrIn = sc.nextLine(); //считываем целиком строку из файла
-           sc.close();
-           Credit NewCred = new Credit(); 
-           String [] StrInArray = StrIn.split(";");
-           NewCred.id_client = Integer.parseInt(StrInArray[0]);
-           NewCred.size = Integer.parseInt(StrInArray[1]); // размер кредита
-           NewCred.percent = Integer.parseInt(StrInArray[2]); //процент по кредиту
-           NewCred.first_pay_size = Integer.parseInt(StrInArray[3]); //размер первоначального взноса
-           NewCred.typeOfPayment= StrInArray[4].charAt(0); //вид платежа - аннуитетный или дифференцированный
-           NewCred.term = Integer.parseInt(StrInArray[5]); //срок кредита в месяцах
-           NewCred.termOfFirstPayment = StrInArray[6]; // дата первого платежа
-           //        
-           //DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy", Locale.ENGLISH);
-           //LocalDate date = LocalDate.parse(NewCred.termOfFirstPayment, formatter);
-           //System.out.println(date); // 2010-01-02
+          
            
        }    
 
@@ -59,6 +43,8 @@ public class Credit //класс контроллер - приём запроса от пользователя;анализ за
 
        }
 
+//-------------------------------------Controller End------------------------------------------------------------
+//-------------------------------------Model Begin----------------------------------------------------------------
        public class Model //Мodel - бизнес логика. В него передаем как обьект данные по кредиту для проведения расчета
 
        {
@@ -94,21 +80,34 @@ public class Credit //класс контроллер - приём запроса от пользователя;анализ за
                          Payment = S*(p+(p/(Math.pow((1+N),N)-1)));
                          Rem=S-PrincipalAll; //если первый платеж , то остаток задолженности равен сумме кредита
                          Percent = p * Rem;
-                         Principal = Payment - Percent;
-                         PrincipalAll = PrincipalAll + Principal;
+                         Principal = Payment - Percent; //сумма, идущая в погашение основного долга, равна Principal = Payment - Percent.
+                         PrincipalAll = PrincipalAll + Principal; 
                     }     
                }
                else if (crd.typeOfPayment == 'Д') //если тип платежа дифференцированный
                {
-               /*Схема оплаты по дифференцированному платежу выглядит следующим образом:
-               Условие: сумма кредита — 300 000 рублей, срок кредита — 6 месяцев, ставка по кредиту — 20%. Погашение кредита осуществляется дифференцированными платежами:
-               1. Ежемесячный платеж по основному долгу = сумма кредита / количество платежных периодов в течение всего срока кредита.
-               300 000 рублей / 6 месяцев = 50 000 рублей.
-               2. Ежемесячная сумма начисленных процентов по кредиту = остаток основного долга в текущем периоде * годовая процентная ставка * число дней в платежном 
-               периоде (от 28 до 31) / число дней в году (365 или 366).
-               3. Ежемесячный платеж по кредиту = ежемесячный платеж по основному долгу + ежемесячная сумма начисленных процентов по кредиту.
-               */
+                    /*Схема оплаты по дифференцированному платежу выглядит следующим образом:
+                    Условие: сумма кредита — 300 000 рублей, срок кредита — 6 месяцев, ставка по кредиту — 20%. Погашение кредита осуществляется дифференцированными платежами:
+                    1. Ежемесячный платеж по основному долгу = сумма кредита / количество платежных периодов в течение всего срока кредита.
+                    300 000 рублей / 6 месяцев = 50 000 рублей.
+                    2. Ежемесячная сумма начисленных процентов по кредиту Percent = p * Rem, где Rem – остаток задолженности по кредиту. 
+                    p – это нормализованная месячная процентная ставка (p = P / 100 / 12).
+                    3. Ежемесячный платеж по кредиту = ежемесячный платеж по основному долгу + ежемесячная сумма начисленных процентов по кредиту.
+                    */
+                    Principal = S/N; //Ежемесячный платеж по основному долгу
+                    int p = P / 100 / 12; //нормализованная месячная процентная ставка (p = P / 100 / 12).
+                    for (int i=1; i<=N; i++) //цикл по кол-ву ежемесячных платежей
+                    {
+                         Rem=S-PrincipalAll; //если первый платеж , то остаток задолженности равен сумме кредита
+                         Percent = p * Rem;
+                         PrincipalAll = PrincipalAll + Principal; 
+                         Payment = Principal + Percent; //Ежемесячный платеж по кредиту
+                    }     
+
                }
           }
      }
+     //----------------------------Model End----------------------------------------
+         
 }
+
