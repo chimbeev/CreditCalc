@@ -19,7 +19,7 @@ public class View //Представление получает данные из файла и отправляет в Model,
           
           {
                
-                    Stream<String> lineStream = Files.newBufferedReader(Paths.get("input3.csv")).lines();
+                      
               
                return lineStream;
                

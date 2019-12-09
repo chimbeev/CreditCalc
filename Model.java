@@ -9,8 +9,8 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.ParseException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.time.*;
+import java.time.format.*;
 import java.nio.file.*;
 
 
@@ -43,7 +43,13 @@ public class Model //Мodel - бизнес логика. В него передаем как поток данные по 
                         double Principal = 0; //сумма, идущая в погашение основного долга в аннуитетном платеже
                         double PrincipalAll = 0; // общая сумма, направленная в погашение основного долга
                         List<String> CredOut = Arrays.asList(); //
-                        String strCredOut = NewCred.id_client + " " + NewCred.size + " " + NewCred.percent;
+                        String strCredOut = NewCred.id_client + " " + NewCred.size + " " + NewCred.percent + " " + NewCred.first_pay_size + " " + NewCred.typeOfPayment + " " + NewCred.term + " " + 
+                        " " + NewCred.termOfFirstPayment;
+                        //преобразуем строку с датой в обьект календарь
+                        String input = NewCred.termOfFirstPayment;
+                        DateTimeFormatter f = DateTimeFormatter.ofPattern( "dd MM uuuu" );
+                        ZonedDateTime zdt = ZonedDateTime.parse( input , f );
+                        
                         if (NewCred.typeOfPayment == 'А') //если тип платежа аннуитетный
                         /* (ежемесячная сумма выплаты не меняется, но с каждым месяцем в этой сумме содержится больше выплат основного долга по кредиту и меньше процентных выплат)
                             Вычисление суммы аннуитетного платежа производится по формуле:
@@ -60,9 +66,9 @@ public class Model //Мodel - бизнес логика. В него передаем как поток данные по 
                                 Rem=S-PrincipalAll; //если первый платеж , то остаток задолженности равен сумме кредита
                                 Percent = p * Rem;
                                 Principal = Payment - Percent; //сумма, идущая в погашение основного долга, равна Principal = Payment - Percent.
-                                PrincipalAll = PrincipalAll + Principal; 
-                                strCredOut = strCredOut + " " + NewCred.first_pay_size + " " + NewCred.typeOfPayment + " " + NewCred.term + " " + 
-                                " " + NewCred.termOfFirstPayment;
+                                PrincipalAll = PrincipalAll + Principal;
+                                ZonedDateTime DataPlatezha = zdt;
+                                strCredOut = strCredOut;
                             }     
                         }
                         else if (NewCred.typeOfPayment == 'Д') //если тип платежа дифференцированный
