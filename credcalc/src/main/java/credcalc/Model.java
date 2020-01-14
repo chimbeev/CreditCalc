@@ -42,7 +42,7 @@ public class Model //Мodel - бизнес логика. В него передаем как поток данные по 
                         double Percent = 0; //процентная составляющая в платеже по кредиту
                         double Principal = 0; //сумма, идущая в погашение основного долга в аннуитетном платеже
                         double PrincipalAll = 0; // общая сумма, направленная в погашение основного долга
-                        List<String> CredOut = Arrays.asList(); //
+                        
                         String strCredOut = NewCred.id_client + " " + NewCred.size + " " + NewCred.percent + " " + NewCred.first_pay_size + " " + NewCred.typeOfPayment + " " + NewCred.term + " " + 
                         " " + NewCred.termOfFirstPayment;
                         //преобразуем строку с датой в обьект календарь
