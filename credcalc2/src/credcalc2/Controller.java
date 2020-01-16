@@ -1,18 +1,9 @@
 package credcalc2;
 
-import java.util.*;
-import java.util.Date;
 
-import credcalc2.View;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.ParseException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.nio.*;
 import java.util.stream.Stream;
 
 
@@ -34,18 +25,10 @@ public class Controller //класс контроллер - приём запроса от пользователя;анали
        {
         Stream<String> lineStream = View.ReadCrd(); //производим чтение из файла данных по кредитам и получаем данные в виде потока
         Stream<String> lineStreamOut =  Model.getCrd(lineStream); //передаем поток с данными по кредитам получаем результаты
+        View.PrintToFile((InputStream) lineStreamOut); //записываем результаты в файл
        }    
 
-       public static void prn(int nc) //Для вывода на экран
-       {
-            System.out.println(nc);
-
-       }
-       public static void prn(Date nc) //Для вывода на экран
-       {
-            System.out.println(nc);
-
-       }
+   
 
 //-------------------------------------Controller End------------------------------------------------------------
 
