@@ -2,11 +2,8 @@ package credcalc2;
 
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.text.ParseException;
-import java.util.stream.Stream;
-
+import java.util.List;
 
 //---------------------------Controller Begin ------------------------------
 
@@ -24,9 +21,11 @@ public class Controller //класс контроллер - приём запроса от пользователя;анали
     
     public static void main(String[] args) throws IOException, ParseException
        {
-        Stream<String> lineStream = View.ReadCrd(); //производим чтение из файла данных по кредитам и получаем данные в виде потока
-        Stream<String> lineStreamOut =  Model.getCrd(lineStream); //передаем поток с данными по кредитам получаем результаты
-        //View.PrintToFile((InputStream) lineStreamOut); //записываем результаты в файл
+        List<String> dataListIn = View.ReadCrd(); //производим чтение из файла данных по кредитам и получаем данные в виде list
+        //View.ShowStream(lineStream);
+        List<String> dataListOut =  Model.getCrd(dataListIn); //передаем list с данными по кредитам и получаем результаты расчетов
+        //View.PrintToFile(lineStreamOut); //записываем результаты в файл
+        View.WriteJson(dataListOut);
        }    
 
    
