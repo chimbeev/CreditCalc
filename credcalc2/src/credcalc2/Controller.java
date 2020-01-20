@@ -21,11 +21,12 @@ public class Controller //класс контроллер - приём запроса от пользователя;анали
     
     public static void main(String[] args) throws IOException, ParseException
        {
-        List<String> dataListIn = View.ReadCrd(); //производим чтение из файла данных по кредитам и получаем данные в виде list
+        //List<String> dataListIn = View.ReadCrd(); //производим чтение из файла данных по кредитам и получаем данные в виде list
         //View.ShowStream(lineStream);
-        List<String> dataListOut =  Model.getCrd(dataListIn); //передаем list с данными по кредитам и получаем результаты расчетов
+        //List<String> dataListOut =  Model.getCrd(dataListIn); //передаем list с данными по кредитам и получаем результаты расчетов
         //View.PrintToFile(lineStreamOut); //записываем результаты в файл
-        View.WriteJson(dataListOut);
+        //View.WriteJson(dataListOut);
+          SrvSocket.SrvSocket();
        }    
 
    

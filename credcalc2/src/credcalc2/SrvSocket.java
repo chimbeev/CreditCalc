@@ -1,25 +1,33 @@
 package credcalc2;
-//http://www.javaportal.ru/java/articles/java_http_web/article04.html
+
 import java.net.*;
 import java.io.*;
 
-public class SrvSocket 
+public class SrvSocket implements Runnable
 {
 
-    public SrvSocket(int port) {
-    }
-    public static void main(String[] ar)
-    {
-        int port = 8080;
-        try
-        {
-            ServerSocket ss = new ServerSocket(port);
-            Socket socket = ss.accept();
-            System.out.println("Есть контакт!");
+    public static void SrvSocket () {
+            int port = 8080;
+            SrvSocket st = new SrvSocket();
+            Thread th = new Thread(st);
+            th.start(); // запускаем сервер в отдельном потоке
+            try
+            {
+                ServerSocket ss = new ServerSocket(port);
+                
+                System.out.println("Сервер запущен! Ожидаю обмена ...");
+                Socket socket = ss.accept();
+                System.out.println("Есть контакт!");
+            }
+            catch(Exception er)
+            {
+                er.printStackTrace();
+            }
         }
-        catch(Exception er)
-        {
-            er.printStackTrace();
-        }
+
+    @Override
+    public void run() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
+
