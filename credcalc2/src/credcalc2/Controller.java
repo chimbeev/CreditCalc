@@ -29,7 +29,8 @@ public class Controller //класс контроллер - приём запроса от пользователя;анали
         SrvSocket srv = new SrvSocket();
         Thread childThread = new Thread(srv);
         childThread.start(); //стартовали сервер в отдельной нити
-        ClientSocket.main(args);
+        ClientSocket2.main(args);
+        //Test1.main(args);
         
        }    
 
