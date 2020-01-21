@@ -26,7 +26,11 @@ public class Controller //класс контроллер - приём запроса от пользователя;анали
         //List<String> dataListOut =  Model.getCrd(dataListIn); //передаем list с данными по кредитам и получаем результаты расчетов
         //View.PrintToFile(lineStreamOut); //записываем результаты в файл
         //View.WriteJson(dataListOut);
-          SrvSocket.SrvSocket();
+        SrvSocket srv = new SrvSocket();
+        Thread childThread = new Thread(srv);
+        childThread.start(); //стартовали сервер в отдельной нити
+        ClientSocket.main(args);
+        
        }    
 
    

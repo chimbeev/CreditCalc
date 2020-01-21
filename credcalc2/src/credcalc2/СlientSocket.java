@@ -8,6 +8,7 @@ class ClientSocket
     // первый аргумент - имя файла, содержащего HTTP запрос
     // предполагается, что запрос не будет больше 64 килобайт
     // второй - имя файла, куда будет слит ответ сервера
+    //http://www.javaportal.ru/java/articles/java_http_web/article04.html
     public static void main(String args[])
     {
         try
