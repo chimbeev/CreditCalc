@@ -1,4 +1,4 @@
-GET / HTTP/1.1
+GET /input4.csv HTTP/1.1
 Host: 127.0.0.1
 User-Agent: HTTPClient
 

@@ -1,0 +1,5 @@
+HTTP/1.1 200 OK
+Date: Wed, 22 Jan 2020 03:26:56 GMT
+Content-length: 74
+
+<h1>URI: /input4.csv</h1><p>Host=127.0.0.1</p><p>User-agent=HTTPClient</p>

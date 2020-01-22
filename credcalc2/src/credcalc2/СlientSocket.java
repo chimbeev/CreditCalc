@@ -15,10 +15,14 @@ class ClientSocket
         {
             byte buf[] = new byte[64*1024];
             int r;
-            String header = "GET http://127.0.0.1 HTTP/1.1\n" + "Host: 127.0.0.1\n" + "User-Agent: HTTPClient\n" + "\n" + "\n";
-            String host = "127.0.0.1";
+            // читаем файл с запросом в переменную header
+            FileInputStream fis = new FileInputStream("request.txt");
+            r = fis.read(buf);
+            String header = new String(buf, 0, r);
+            fis.close();
 
             int port = 8080;
+            String host = "127.0.0.1";
     
             // открываем сокет до сервера
             Socket s = new Socket(host, port);
