@@ -24,9 +24,19 @@ public class HTTPServer3
       HttpContext context = server.createContext("/");
       context.setHandler(HTTPServer3::handleRequest);
       server.start();
+      HttpContext context2 = server.createContext("/files");
+      context.setHandler(HTTPServer3::handleRequest2);
+      server.start();
   }
 
   private static void handleRequest(HttpExchange exchange) throws IOException {
+      String response = "Hi there!";
+      exchange.sendResponseHeaders(200, response.getBytes().length);//response code and length
+      OutputStream os = exchange.getResponseBody();
+      os.write(response.getBytes());
+      os.close();
+  }
+  private static void handleRequest2(HttpExchange exchange) throws IOException {
       String response = "Hi there!";
       exchange.sendResponseHeaders(200, response.getBytes().length);//response code and length
       OutputStream os = exchange.getResponseBody();
