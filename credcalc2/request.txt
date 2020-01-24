@@ -1,4 +1,4 @@
-GET /input4.csv HTTP/1.1
+GET /path/resource?param1=5678&param2=rty67 HTTP/1.1
 Host: 127.0.0.1
 User-Agent: HTTPClient
 

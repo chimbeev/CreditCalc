@@ -24,7 +24,7 @@ public class ClientSocket2
             URL obj = new URL(url);
             HttpURLConnection connection = (HttpURLConnection) obj.openConnection();
 
-            connection.setRequestMethod("GET");
+            connection.setRequestMethod("GET /path/resource?param1=value1&param2=value2 HTTP/1.1");
 
             BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             String inputLine;

@@ -27,7 +27,7 @@ package credcalc2;
 	            url = new URL("https://localhost:8080/request.txt");
 	            con = url.openConnection();
 	            File file = new File("input10.txt");
-	            BufferedInputStream bis = new BufferedInputStream(con.getInputStream());
+	            BufferedInputStream bis = new BufferedInputStream(con.getInputStream()); //входящий поток от вебсервера
 	            BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file.getName()));
                     while ((i = bis.read()) != -1) 
                     {

@@ -27,7 +27,7 @@ public class Controller //класс контроллер - приём запроса от пользователя;анали
         //View.PrintToFile(lineStreamOut); //записываем результаты в файл
         //View.WriteJson(dataListOut);
           HTTPServer3.main(args);
-          //ClientSocket3.main(args);
+          ClientSocket.main(args);
         //SrvSocket srv = new SrvSocket();
         //Thread childThread = new Thread(srv);
         //childThread.start(); //стартовали сервер в отдельной нити
