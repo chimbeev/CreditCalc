@@ -19,17 +19,20 @@ class ClientSocket
             FileInputStream fis = new FileInputStream("request.txt");
             r = fis.read(buf);
             String header = new String(buf, 0, r);
+            System.out.println(header);
+            System.out.println(header.getBytes());
+            header ="GET /path/resource?param1=5678&param2=rty67 HTTP/1.1" + "\n" + "Host: 127.0.0.1" + "\n" + "User-Agent: HTTPClient" + "\n" + "\n" + "\n";
             fis.close();
-
+            System.out.println(header);
             int port = 8080;
             String host = "127.0.0.1";
-    
+            System.out.println(header.getBytes("UTF-8"));
             // открываем сокет до сервера
             Socket s = new Socket(host, port);
 
             // пишем туда HTTP request
-            s.getOutputStream().write(header.getBytes());
-
+            s.getOutputStream().write(header.getBytes("UTF-8"));
+            
             // получаем поток данных от сервера
             InputStream is = s.getInputStream();
 

@@ -19,12 +19,12 @@ public class ClientSocket2
 {
     public static void main(String args[]) throws IOException
         {   
-            String url = "http://127.0.0.1:8080/";
+            String url = "http://127.0.0.1:8080/?param1=45tr&param2=ewr54";
 
             URL obj = new URL(url);
             HttpURLConnection connection = (HttpURLConnection) obj.openConnection();
 
-            connection.setRequestMethod("GET /path/resource?param1=value1&param2=value2 HTTP/1.1");
+            connection.setRequestMethod("GET");
 
             BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             String inputLine;

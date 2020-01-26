@@ -1,14 +1,16 @@
 package credcalc2;
 
 import com.google.gson.Gson;
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.*;
 
@@ -42,6 +44,28 @@ public class View //Представление получает данные из файла и отправляет в Model,
                             }
                     return wordList;
           }
+          
+          public static List<String> ReadCrd2() throws IOException//считывает из файла входные данные по кредитам быстрее
+          
+          {     
+                byte [] buffer = new byte[8000];
+                FileInputStream fis = null;
+                fis = new FileInputStream("input4.csv");
+                BufferedInputStream bis = new BufferedInputStream(fis);
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                String s = null;
+                while (bis.read(buffer,0,buffer.length) > 0)
+                {
+                    baos.write(buffer);
+                    s = baos.toString("Cp1251"); //получили строку со всеми кредитами
+                }
+                String [] st; //поделили строку по кредитам
+                st = s.split("\n");
+                List<String> wordList = Arrays.asList(st);
+                //System.out.println(wordList.size());
+                //System.out.println(wordList.get(90));
+                return wordList;
+          }
 
           public static void PrintToFile(List<String> stream) throws IOException//Записывает в файл расчитанные данные по кредитам
           
@@ -57,6 +81,11 @@ public class View //Представление получает данные из файла и отправляет в Model,
           public static void ShowStream(Stream<String> stream) //показывает на экране стрим
           {
               stream.forEach(s -> System.out.println(s));
+          }
+          
+          public static void ShowList(List<String> list) //показывает на экране стрим
+          {
+              for (String e : list) {System.out.println(e);}  
           }
 
     public static void WriteJson(List<String> stream) throws IOException 

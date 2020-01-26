@@ -40,6 +40,7 @@ public class HTTPServer3
       String respo = exchange.getRequestURI().getQuery();
       Map<String, String> params = queryToMap(exchange.getRequestURI().getQuery()); 
       System.out.println("param 1=" + params.get("param1"));
+      System.out.println("param 2=" + params.get("param2"));
       System.out.println(respo);
   }
   //https://stackoverflow.com/questions/11640025/how-to-obtain-the-query-string-in-a-get-with-java-httpserver-httpexchange
