@@ -23,7 +23,7 @@ public class Model //Мodel - бизнес логика. В него передаем как поток данные по 
                 Credit NewCred = new Credit();
                 List<String> strCredOutlist = new ArrayList<>();
                 String [] StrInArray = new String[7];
-                String [] StrOutArray = new String[20];
+                
                 int S=0;//сумма кредита
                 double P=0; //процент по кредиту, годовых
                 int N=0; //срок кредита в месяцах
@@ -35,7 +35,7 @@ public class Model //Мodel - бизнес логика. В него передаем как поток данные по 
                 double Principal = 0; //сумма, идущая в погашение основного долга в аннуитетном платеже
                 double PrincipalAll = 0; // общая сумма, направленная в погашение основного долга
                 double p = 0;
-                String strCredOut = "";
+                //String strCredOut = "";
                 String input = null;
                 Calendar calndr1 = (Calendar)Calendar.getInstance(); 
                 SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
@@ -44,7 +44,8 @@ public class Model //Мodel - бизнес логика. В него передаем как поток данные по 
                 String formattedDate = "";
                 int b = 0;
                 int i = 0;
-                StringBuilder builder = new StringBuilder();
+                //StringBuilder builder = new StringBuilder();
+                StringBuilder strCredOut = new StringBuilder();
                 ///for (String value : crd){ //цикл перебора всех кредитов
                 for (int h = 0; h < crd.size()-1; h++) {
                         //System.out.println(crd.get(h));
@@ -68,12 +69,17 @@ public class Model //Мodel - бизнес логика. В него передаем как поток данные по 
                         PercentAll = 0;
                         Principal = 0; //сумма, идущая в погашение основного долга в аннуитетном платеже
                         PrincipalAll = 0; // общая сумма, направленная в погашение основного долга
-                        strCredOut = "";
+                        //strCredOut = "";
+                        //strCredOut.setLength(0); //обнуляем StringBuilder
+                        //System.out.println(h+1);
+                        //strCredOutlist.set(h+1, "");//обнуляем строку
+                        strCredOutlist.add("");
+                        strCredOutlist.set(h, NewCred.id_client + " " + NewCred.size + " " + NewCred.percent + " " + NewCred.first_pay_size + " " + NewCred.typeOfPayment
+                        + " " + NewCred.term + " " + NewCred.termOfFirstPayment);
                         
-                        strCredOut = NewCred.id_client + " " + NewCred.size + " " + NewCred.percent + " " + NewCred.first_pay_size + " " + NewCred.typeOfPayment + " " + NewCred.term + " " 
-                                + NewCred.termOfFirstPayment;
-                        StrOutArray[0]=NewCred.id_client + " " + NewCred.size + " " + NewCred.percent + " " + NewCred.first_pay_size + " " + NewCred.typeOfPayment + " " + NewCred.term + " " 
-                                + NewCred.termOfFirstPayment;
+                        //strCredOut = strCredOut.append(NewCred.id_client).append(" ").append(NewCred.size).append(" ").append(NewCred.percent).append(" ")
+                        //        .append(NewCred.first_pay_size).append(" ").append(NewCred.typeOfPayment).append(" ").append(NewCred.term).append(" ").append(NewCred.termOfFirstPayment);
+                        
                         //преобразуем строку с датой в обьект календарь
                         input = NewCred.termOfFirstPayment;
                         // Setting to a different date 
@@ -101,16 +107,14 @@ public class Model //Мodel - бизнес логика. В него передаем как поток данные по 
                                 PercentAll = getRound(PercentAll + Percent);
                                 Principal = getRound(Payment - Percent); //сумма, идущая в погашение основного долга, равна Principal = Payment - Percent.
                                 PrincipalAll = PrincipalAll + Principal;
+                                strCredOutlist.set(h,strCredOutlist.get(h) + " " + formattedDate + " " + Payment + " " + Percent + " " + Principal);
                                 
+                                //strCredOut = strCredOut.append(" ").append(formattedDate).append(" ").append(Payment).append(" ").append(Percent).append(" ").append(Principal);
                                 //strCredOut = strCredOut + " " + formattedDate + " " + Payment + " " + Percent + " " + Principal;
                                 if (b==N) 
                                 {
-                                    builder.append(strCredOut);
-                                    builder.append(" ");
-                                    builder.append(PaymentAll);
-                                    builder.append(" ");
-                                    builder.append(PercentAll);
-                                    strCredOut = builder.toString();
+                                    strCredOutlist.set(h,strCredOutlist.get(h) + " " + PaymentAll + " " + PercentAll);
+                                    //strCredOut = strCredOut.append(" ").append(PaymentAll).append(" ").append(PercentAll);
                                     //strCredOut = strCredOut + ' ' + PaymentAll + ' ' + PercentAll;
                                 }
                                 calndr1.add(Calendar.MONTH, 1); //дата следующего платежа по кредиту
@@ -140,25 +144,13 @@ public class Model //Мodel - бизнес логика. В него передаем как поток данные по 
                                 PrincipalAll = Principal + PrincipalAll;                            
                                 Payment = getRound(Principal + Percent); //Ежемесячный платеж по кредиту
                                 PaymentAll = getRound(PaymentAll + Payment);
-                                builder.append(strCredOut);
-                                builder.append(" ");
-                                builder.append(formattedDate);
-                                builder.append(" ");
-                                builder.append(Payment);
-                                builder.append(" ");
-                                builder.append(Percent);
-                                builder.append(" ");
-                                builder.append(Principal);
-                                strCredOut = builder.toString(); 
+                                strCredOutlist.set(h,strCredOutlist.get(h) + " " + formattedDate + " " + Payment + " " + Percent + " " + Principal);
+                                //strCredOut = strCredOut.append(" ").append(formattedDate).append(" ").append(Payment).append(" ").append(Percent).append(" ").append(Principal);
                                 //strCredOut = strCredOut + " " + formattedDate + " " + Payment + " " + Percent + " " + Principal;
                                 if (i==N) 
                                 {
-                                    builder.append(strCredOut);
-                                    builder.append(" ");
-                                    builder.append(PaymentAll);
-                                    builder.append(" ");
-                                    builder.append(PercentAll);
-                                    strCredOut = builder.toString();
+                                    strCredOutlist.set(h,strCredOutlist.get(h) + " " + PaymentAll + " " + PercentAll);
+                                    //strCredOut = strCredOut.append(" ").append(PaymentAll).append(" ").append(PercentAll);
                                     //strCredOut = strCredOut + ' ' + PaymentAll + ' ' + PercentAll;
                                 }
                                 calndr1.add(Calendar.MONTH, 1); //дата следующего платежа по кредиту
@@ -167,8 +159,9 @@ public class Model //Мodel - бизнес логика. В него передаем как поток данные по 
                                 formattedDate = sdf.format(dt);
                             }     
                         }
-                        //System.out.println(strCredOut);
-                        strCredOutlist.add(strCredOut);//Записываем в list результаты расчета
+                        //System.out.println(strCredOut.toString());
+                        
+                        //strCredOutlist.add(strCredOut.toString());//Записываем в list результаты расчета
                         
                     };
                return strCredOutlist;

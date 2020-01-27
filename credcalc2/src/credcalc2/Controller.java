@@ -23,10 +23,11 @@ public class Controller //класс контроллер - приём запроса от пользователя;анали
        {
         //List<String> dataListIn = View.ReadCrd(); //производим чтение из файла данных по кредитам и получаем данные в виде list
         List<String> dataListIn = View.ReadCrd2(); //производим чтение из файла данных по кредитам и получаем данные в виде list
-        //View.ShowList(dataListIn);
+        View.ShowList(dataListIn);
         List<String> dataListOut =  Model.getCrd(dataListIn); //передаем list с данными по кредитам и получаем результаты расчетов
+        View.ShowList(dataListOut);
         //View.PrintToFile(lineStreamOut); //записываем результаты в файл
-        View.WriteJson(dataListOut);
+        //View.WriteJson(dataListOut);
         //HTTPServer3.main(args); //запускаем http сервер
         //ClientSocket2.main(args);//отправляем параметры кредита для расчета
         //SrvSocket srv = new SrvSocket();
