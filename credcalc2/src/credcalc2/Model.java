@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 public class Model //Мodel - бизнес логика. В него передаем как поток данные по кредиту для проведения расчета
 
        {
-           
+          
           public static List<String> getCrd(List<String> crd)
           {
                 //получив данные по кредиту в виде потока производим расчет графика платежей. После расчета возвращаем данные по кредиту в виде стрима
@@ -44,6 +44,8 @@ public class Model //Мodel - бизнес логика. В него передаем как поток данные по 
                 String formattedDate = "";
                 int b = 0;
                 int i = 0;
+                double cir =0;
+                BigDecimal bd = new BigDecimal(cir);
                 //StringBuilder builder = new StringBuilder();
                 StringBuilder strCredOut = new StringBuilder();
                 ///for (String value : crd){ //цикл перебора всех кредитов
@@ -70,13 +72,19 @@ public class Model //Мodel - бизнес логика. В него передаем как поток данные по 
                         Principal = 0; //сумма, идущая в погашение основного долга в аннуитетном платеже
                         PrincipalAll = 0; // общая сумма, направленная в погашение основного долга
                         //strCredOut = "";
-                        //strCredOut.setLength(0); //обнуляем StringBuilder
+                        strCredOut.setLength(0); //обнуляем StringBuilder
                         //System.out.println(h+1);
                         //strCredOutlist.set(h+1, "");//обнуляем строку
-                        strCredOutlist.add("");
-                        strCredOutlist.set(h, NewCred.id_client + " " + NewCred.size + " " + NewCred.percent + " " + NewCred.first_pay_size + " " + NewCred.typeOfPayment
-                        + " " + NewCred.term + " " + NewCred.termOfFirstPayment);
+                        //strCredOut = strCredOut.append(NewCred.id_client).append(" ").append(NewCred.size).append(" ").append(NewCred.percent).append(" ")
+                        //        .append(NewCred.first_pay_size).append(" ").append(NewCred.typeOfPayment).append(" ").append(NewCred.term).append(" ").append(NewCred.termOfFirstPayment);
                         
+                        strCredOutlist.add("");
+                        //strCredOutlist.set(h, NewCred.id_client + " " + NewCred.size + " " + NewCred.percent + " " + NewCred.first_pay_size + " " + NewCred.typeOfPayment
+                        //+ " " + NewCred.term + " " + NewCred.termOfFirstPayment);
+                        strCredOutlist.set(h,(strCredOut.append(NewCred.id_client).append(" ").append(NewCred.size).append(" ").append(NewCred.percent).append(" ")
+                                .append(NewCred.first_pay_size).append(" ").append(NewCred.typeOfPayment).append(" ").append(NewCred.term).append(" ").append(NewCred.termOfFirstPayment)).toString());
+                        
+                        //        .append(NewCred.first_pay_size).append(" ").append(NewCred.typeOfPayment).append(" ").append(NewCred.term).append(" ").append(NewCred.termOfFirstPayment);
                         //strCredOut = strCredOut.append(NewCred.id_client).append(" ").append(NewCred.size).append(" ").append(NewCred.percent).append(" ")
                         //        .append(NewCred.first_pay_size).append(" ").append(NewCred.typeOfPayment).append(" ").append(NewCred.term).append(" ").append(NewCred.termOfFirstPayment);
                         
@@ -107,7 +115,10 @@ public class Model //Мodel - бизнес логика. В него передаем как поток данные по 
                                 PercentAll = getRound(PercentAll + Percent);
                                 Principal = getRound(Payment - Percent); //сумма, идущая в погашение основного долга, равна Principal = Payment - Percent.
                                 PrincipalAll = PrincipalAll + Principal;
-                                strCredOutlist.set(h,strCredOutlist.get(h) + " " + formattedDate + " " + Payment + " " + Percent + " " + Principal);
+                                //strCredOutlist.set(h,strCredOutlist.get(h) + " " + formattedDate + " " + Payment + " " + Percent + " " + Principal);
+                                
+                                strCredOut.setLength(0);
+                                strCredOutlist.set(h,strCredOutlist.get(h) + (strCredOut.append(" ").append(formattedDate).append(" ").append(Payment).append(" ").append(Percent).append(" ").append(Principal)).toString());
                                 
                                 //strCredOut = strCredOut.append(" ").append(formattedDate).append(" ").append(Payment).append(" ").append(Percent).append(" ").append(Principal);
                                 //strCredOut = strCredOut + " " + formattedDate + " " + Payment + " " + Percent + " " + Principal;
@@ -144,7 +155,9 @@ public class Model //Мodel - бизнес логика. В него передаем как поток данные по 
                                 PrincipalAll = Principal + PrincipalAll;                            
                                 Payment = getRound(Principal + Percent); //Ежемесячный платеж по кредиту
                                 PaymentAll = getRound(PaymentAll + Payment);
-                                strCredOutlist.set(h,strCredOutlist.get(h) + " " + formattedDate + " " + Payment + " " + Percent + " " + Principal);
+                                //strCredOutlist.set(h,strCredOutlist.get(h) + " " + formattedDate + " " + Payment + " " + Percent + " " + Principal);
+                                strCredOut.setLength(0);
+                                strCredOutlist.set(h,strCredOutlist.get(h) + (strCredOut.append(" ").append(formattedDate).append(" ").append(Payment).append(" ").append(Percent).append(" ").append(Principal)).toString());
                                 //strCredOut = strCredOut.append(" ").append(formattedDate).append(" ").append(Payment).append(" ").append(Percent).append(" ").append(Principal);
                                 //strCredOut = strCredOut + " " + formattedDate + " " + Payment + " " + Percent + " " + Principal;
                                 if (i==N) 
@@ -186,7 +199,10 @@ public class Model //Мodel - бизнес логика. В него передаем как поток данные по 
           
           public static double getRound(double cir) // округляет до сотых
           {
-             return (new BigDecimal(cir).setScale(2, RoundingMode.HALF_UP).doubleValue()); 
+              BigDecimal bd = new BigDecimal(cir);
+              //.setScale(2, RoundingMode.HALF_UP).doubleValue());
+              //BigDecimal bd = new BigDecimal(cir).setScale(2, RoundingMode.HALF_UP).doubleValue());
+             return (bd.setScale(2, RoundingMode.HALF_UP).doubleValue()); 
           }
   }
 
