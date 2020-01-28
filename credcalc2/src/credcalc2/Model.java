@@ -2,8 +2,9 @@
 package credcalc2;
 
 
-import java.math.BigDecimal;
+//import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -20,10 +21,9 @@ public class Model //Мodel - бизнес логика. В него передаем как поток данные по 
           public static List<String> getCrd(List<String> crd)
           {
                 //получив данные по кредиту в виде потока производим расчет графика платежей. После расчета возвращаем данные по кредиту в виде стрима
-                Credit NewCred = new Credit();
+                //Credit NewCred = new Credit();
                 List<String> strCredOutlist = new ArrayList<>();
                 String [] StrInArray = new String[7];
-                
                 int S=0;//сумма кредита
                 double P=0; //процент по кредиту, годовых
                 int N=0; //срок кредита в месяцах
@@ -44,8 +44,10 @@ public class Model //Мodel - бизнес логика. В него передаем как поток данные по 
                 String formattedDate = "";
                 int b = 0;
                 int i = 0;
-                double cir =0;
-                BigDecimal bd = new BigDecimal(cir);
+                //double cir =0;
+                //BigDecimal bd = new BigDecimal(cir);
+                DecimalFormat df = new DecimalFormat("#.##");
+                df.setRoundingMode(RoundingMode.CEILING);
                 //StringBuilder builder = new StringBuilder();
                 StringBuilder strCredOut = new StringBuilder();
                 ///for (String value : crd){ //цикл перебора всех кредитов
@@ -54,16 +56,16 @@ public class Model //Мodel - бизнес логика. В него передаем как поток данные по 
                         //if(value!=null) StrInArray=value.split(";"); //разделяем строку по символам ; и записываем в массив
                         if(crd.get(h)!=null) StrInArray=crd.get(h).split(";");
                         //System.out.println(StrInArray[0]);
-                        NewCred.id_client = Integer.parseInt(StrInArray[0]);
-                        NewCred.size = Integer.parseInt(StrInArray[1]); // размер кредита
-                        NewCred.percent = Double.parseDouble(StrInArray[2].replace(",",".")); //процент по кредиту
-                        NewCred.first_pay_size = Integer.parseInt(StrInArray[3]); //размер первоначального взноса
-                        NewCred.typeOfPayment= StrInArray[4].charAt(0); //вид платежа - аннуитетный или дифференцированный
-                        NewCred.term = Integer.parseInt(StrInArray[5]); //срок кредита в месяцах
-                        NewCred.termOfFirstPayment = StrInArray[6].substring(0, 10); // дата первого платежа
-                        S=NewCred.size;//сумма кредита
-                        P=NewCred.percent; //процент по кредиту, годовых
-                        N=NewCred.term; //срок кредита в месяцах
+                        //NewCred.id_client = Integer.parseInt(StrInArray[0]);
+                        //NewCred.size = Integer.parseInt(StrInArray[1]); // размер кредита
+                        //NewCred.percent = Double.parseDouble(StrInArray[2].replace(",",".")); //процент по кредиту
+                        //NewCred.first_pay_size = Integer.parseInt(StrInArray[3]); //размер первоначального взноса
+                        //NewCred.typeOfPayment= StrInArray[4].charAt(0); //вид платежа - аннуитетный или дифференцированный
+                        //NewCred.term = Integer.parseInt(StrInArray[5]); //срок кредита в месяцах
+                        //NewCred.termOfFirstPayment = StrInArray[6].substring(0, 10); // дата первого платежа
+                        S=Integer.parseInt(StrInArray[1]);//сумма кредита
+                        P=Double.parseDouble(StrInArray[2].replace(",",".")); //процент по кредиту, годовых
+                        N=Integer.parseInt(StrInArray[5]); //срок кредита в месяцах
                         Rem = S; //остаток задолженности по кредиту
                         Payment = 0; //сумма аннуитетного платежа
                         PaymentAll = 0;
@@ -81,15 +83,15 @@ public class Model //Мodel - бизнес логика. В него передаем как поток данные по 
                         strCredOutlist.add("");
                         //strCredOutlist.set(h, NewCred.id_client + " " + NewCred.size + " " + NewCred.percent + " " + NewCred.first_pay_size + " " + NewCred.typeOfPayment
                         //+ " " + NewCred.term + " " + NewCred.termOfFirstPayment);
-                        strCredOutlist.set(h,(strCredOut.append(NewCred.id_client).append(" ").append(NewCred.size).append(" ").append(NewCred.percent).append(" ")
-                                .append(NewCred.first_pay_size).append(" ").append(NewCred.typeOfPayment).append(" ").append(NewCred.term).append(" ").append(NewCred.termOfFirstPayment)).toString());
+                        strCredOutlist.set(h,(strCredOut.append(Integer.parseInt(StrInArray[0])).append(" ").append(Integer.parseInt(StrInArray[1])).append(" ").append(Double.parseDouble(StrInArray[2].replace(",","."))).append(" ")
+                                .append(Integer.parseInt(StrInArray[3])).append(" ").append(StrInArray[4].charAt(0)).append(" ").append(Integer.parseInt(StrInArray[5])).append(" ").append(StrInArray[6].substring(0, 10))).toString());
                         
                         //        .append(NewCred.first_pay_size).append(" ").append(NewCred.typeOfPayment).append(" ").append(NewCred.term).append(" ").append(NewCred.termOfFirstPayment);
                         //strCredOut = strCredOut.append(NewCred.id_client).append(" ").append(NewCred.size).append(" ").append(NewCred.percent).append(" ")
                         //        .append(NewCred.first_pay_size).append(" ").append(NewCred.typeOfPayment).append(" ").append(NewCred.term).append(" ").append(NewCred.termOfFirstPayment);
                         
                         //преобразуем строку с датой в обьект календарь
-                        input = NewCred.termOfFirstPayment;
+                        input = StrInArray[6].substring(0, 10);
                         // Setting to a different date 
                         
                         try { date = sdf.parse(input); } 
@@ -98,7 +100,7 @@ public class Model //Мodel - бизнес логика. В него передаем как поток данные по 
                         dt = calndr1.getTime(); 
                         //formattedDate = new SimpleDateFormat("dd.MM.yyyy").format(dt);
                         formattedDate = sdf.format(dt);                       
-                        if (NewCred.typeOfPayment == 'А') //если тип платежа аннуитетный
+                        if (StrInArray[4].charAt(0) == 'А') //если тип платежа аннуитетный
                         /* (ежемесячная сумма выплаты не меняется, но с каждым месяцем в этой сумме содержится больше выплат основного долга по кредиту и меньше процентных выплат)
                             Вычисление суммы аннуитетного платежа производится по формуле:
                             Payment = S*(p+(p/((1+p)^N-1)) , где p – это нормализованная месячная процентная ставка (p = P / 100 / 12).
@@ -108,12 +110,14 @@ public class Model //Мodel - бизнес логика. В него передаем как поток данные по 
                         {   p = P/100/12; //нормализованная месячная процентная ставка (p = P /100 / 12).
                             
                             for (b=1; b<=N; b++) //цикл по кол-ву ежемесячных платежей
-                            {   Payment = getRound(S*(p+(p/(Math.pow((1+p),N)-1))));
-                                PaymentAll = getRound(PaymentAll + Payment);
-                                Rem=getRound(S-PrincipalAll);
-                                Percent = getRound(p * Rem);
-                                PercentAll = getRound(PercentAll + Percent);
-                                Principal = getRound(Payment - Percent); //сумма, идущая в погашение основного долга, равна Principal = Payment - Percent.
+                            {   //Payment = getRound(S*(p+(p/(Math.pow((1+p),N)-1))));
+                                //Payment = S*(p+(p/(Math.pow((1+p),N)-1)));
+                                Payment = Double.parseDouble((df.format(S*(p+(p/(Math.pow((1+p),N)-1))))).replace(",","."));
+                                PaymentAll = Double.parseDouble((df.format(PaymentAll + Payment)).replace(",","."));
+                                Rem=Double.parseDouble((df.format(S-PrincipalAll)).replace(",","."));
+                                Percent = Double.parseDouble((df.format(p * Rem)).replace(",","."));
+                                PercentAll = Double.parseDouble((df.format(PercentAll + Percent)).replace(",","."));
+                                Principal = Double.parseDouble((df.format(Payment - Percent)).replace(",",".")); //сумма, идущая в погашение основного долга, равна Principal = Payment - Percent.
                                 PrincipalAll = PrincipalAll + Principal;
                                 //strCredOutlist.set(h,strCredOutlist.get(h) + " " + formattedDate + " " + Payment + " " + Percent + " " + Principal);
                                 
@@ -134,7 +138,7 @@ public class Model //Мodel - бизнес логика. В него передаем как поток данные по 
                                 formattedDate = sdf.format(dt);
                             }     
                         }
-                        else if (NewCred.typeOfPayment == 'Д') //если тип платежа дифференцированный
+                        else if (StrInArray[4].charAt(0) == 'Д') //если тип платежа дифференцированный
                         {   /*Схема оплаты по дифференцированному платежу выглядит следующим образом:
                             Условие: сумма кредита — 300 000 рублей, срок кредита — 6 месяцев, ставка по кредиту — 20%. Погашение кредита осуществляется дифференцированными платежами:
                             1. Ежемесячный платеж по основному долгу = сумма кредита / количество платежных периодов в течение всего срока кредита.
@@ -145,16 +149,16 @@ public class Model //Мodel - бизнес логика. В него передаем как поток данные по 
                             */
                             //strCredOut = NewCred.id_client + " " + NewCred.size + " " + NewCred.percent + " " + NewCred.first_pay_size + " " + NewCred.typeOfPayment + " " + NewCred.term + " " + 
                         //" " + NewCred.termOfFirstPayment;
-                            Principal = getRound(S/N); //Ежемесячный платеж по основному долгу
+                            Principal = Double.parseDouble((df.format(S/N)).replace(",",".")); //Ежемесячный платеж по основному долгу
                             p = P / 100 / 12; //нормализованная месячная процентная ставка (p = P / 100 / 12).
                             for (i=1; i<=N; i++) //цикл по кол-ву ежемесячных платежей
                             {
-                                Rem=getRound(S-PrincipalAll); //если первый платеж , то остаток задолженности равен сумме кредита
-                                Percent = getRound(p * Rem);
-                                PercentAll = getRound(PercentAll + Percent);
+                                Rem=Double.parseDouble((df.format(S-PrincipalAll)).replace(",",".")); //если первый платеж , то остаток задолженности равен сумме кредита
+                                Percent = Double.parseDouble((df.format(p * Rem)).replace(",","."));
+                                PercentAll = Double.parseDouble((df.format(PercentAll + Percent)).replace(",","."));
                                 PrincipalAll = Principal + PrincipalAll;                            
-                                Payment = getRound(Principal + Percent); //Ежемесячный платеж по кредиту
-                                PaymentAll = getRound(PaymentAll + Payment);
+                                Payment = Double.parseDouble((df.format(Principal + Percent)).replace(",",".")); //Ежемесячный платеж по кредиту
+                                PaymentAll = Double.parseDouble((df.format(PaymentAll + Payment)).replace(",","."));
                                 //strCredOutlist.set(h,strCredOutlist.get(h) + " " + formattedDate + " " + Payment + " " + Percent + " " + Principal);
                                 strCredOut.setLength(0);
                                 strCredOutlist.set(h,strCredOutlist.get(h) + (strCredOut.append(" ").append(formattedDate).append(" ").append(Payment).append(" ").append(Percent).append(" ").append(Principal)).toString());
@@ -172,14 +176,15 @@ public class Model //Мodel - бизнес логика. В него передаем как поток данные по 
                                 formattedDate = sdf.format(dt);
                             }     
                         }
-                        //System.out.println(strCredOut.toString());
-                        
+                        //System.out.println(strCredOutlist.get(h));
+                        System.out.println(h);
                         //strCredOutlist.add(strCredOut.toString());//Записываем в list результаты расчета
                         
                     };
                return strCredOutlist;
                        
           }
+          //https://habr.com/ru/company/piter/blog/358898/
           public static class Credit {
             int id_client;
             int size;
@@ -197,13 +202,13 @@ public class Model //Мodel - бизнес логика. В него передаем как поток данные по 
                return null;
           }
           
-          public static double getRound(double cir) // округляет до сотых
-          {
-              BigDecimal bd = new BigDecimal(cir);
+          //public static double getRound(double cir) // округляет до сотых
+          //{
+            //  BigDecimal bd = new BigDecimal(cir);
               //.setScale(2, RoundingMode.HALF_UP).doubleValue());
               //BigDecimal bd = new BigDecimal(cir).setScale(2, RoundingMode.HALF_UP).doubleValue());
-             return (bd.setScale(2, RoundingMode.HALF_UP).doubleValue()); 
-          }
+             //return (bd.setScale(2, RoundingMode.HALF_UP).doubleValue()); 
+          //}
   }
 
                               

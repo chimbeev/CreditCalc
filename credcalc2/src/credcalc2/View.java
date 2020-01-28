@@ -48,20 +48,23 @@ public class View //Представление получает данные из файла и отправляет в Model,
           public static List<String> ReadCrd2() throws IOException//считывает из файла входные данные по кредитам быстрее
           
           {     
-                byte [] buffer = new byte[8000];
+                byte [] buffer = new byte[800000];
                 FileInputStream fis = null;
                 fis = new FileInputStream("input3.csv");
                 BufferedInputStream bis = new BufferedInputStream(fis);
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                String s = null;
+                String s = null; 
                 while (bis.read(buffer,0,buffer.length) > 0)
                 {
                     baos.write(buffer);
                     s = baos.toString("Cp1251"); //получили строку со всеми кредитами
+                    
                 }
                 String [] st; //поделили строку по кредитам
                 st = s.split("\n");
+                System.out.println("Read OK");
                 List<String> wordList = Arrays.asList(st);
+                System.out.println("List OK");
                 //System.out.println(wordList.size());
                 //System.out.println(wordList.get(90));
                 return wordList;
