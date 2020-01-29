@@ -24,7 +24,7 @@ public class View //Представление получает данные из файла и отправляет в Model,
                 BufferedReader reader = null;
                 List<String> wordList = new ArrayList<String>();
                 try {
-                        fis = new FileInputStream("input4.csv");
+                        fis = new FileInputStream("input3.csv");
                         reader = new BufferedReader(new InputStreamReader(fis));
                         String line = reader.readLine();
                          
