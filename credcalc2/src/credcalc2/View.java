@@ -6,12 +6,15 @@ import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.*;
 
 //----------------------------View Begin --------------------------------------
@@ -62,11 +65,9 @@ public class View //Представление получает данные из файла и отправляет в Model,
                 }
                 String [] st; //поделили строку по кредитам
                 st = s.split("\n");
-                System.out.println("Read OK");
+                System.out.println("Данные по кредитам из файла прочитаны.");
                 List<String> wordList = Arrays.asList(st);
-                System.out.println("List OK");
-                //System.out.println(wordList.size());
-                //System.out.println(wordList.get(90));
+                
                 return wordList;
           }
 
@@ -101,6 +102,31 @@ public class View //Представление получает данные из файла и отправляет в Model,
             outputStream.write(strToBytes);
             outputStream.close();
         } catch (IOException e) { e.printStackTrace(); }
+    }
+    
+    public static void AddWriteJson(List<String> stream) throws IOException 
+    { //Записывает в формате json файл расчитанные данные по кредитам 
+        String json = new Gson().toJson(stream);
+        String file_to = "output3.json";
+        byte[] strToBytes = json.getBytes();
+        try (FileOutputStream outputStream = new FileOutputStream(file_to,true)) 
+        {   
+            outputStream.write(strToBytes);
+            outputStream.close();
+            
+        } catch (IOException e) { e.printStackTrace(); }
+    }
+    
+    public static void ClearJson() throws IOException
+    { //Создает и очищает файл 
+        String file_to = "output3.json";
+        ;
+        try (FileOutputStream outputStream = new FileOutputStream(file_to, false))
+        {
+            outputStream.write("".getBytes());
+            outputStream.close();
+        } catch (IOException e) { e.printStackTrace();}
+        
     }
      }
       //----------------------------View End----------------------------------------

@@ -23,15 +23,14 @@ public class Controller //класс контроллер - приём запроса от пользователя;анали
     
     public static void main(String[] args) throws IOException, ParseException, Exception
        {
-        //List<String> dataListIn = View.ReadCrd(); //производим чтение из файла данных по кредитам и получаем данные в виде list
         List<String> dataListIn = View.ReadCrd2(); //производим чтение из файла данных по кредитам и получаем данные в виде list
-        //View.ShowList(dataListIn);
-        //List<String> dataListOut =  Model.getCrd(dataListIn);
+        //Для ускорения расчета кредитов применяем мнопоточность.
         int lList = dataListIn.size(); //длина листа
         int NumElem = lList/1000; //делим лист на 1000 листов
         int endCount = 0;
-        //List<String> dataListOut = null;
-        for (int i = 0;i<1000;i++)
+        View.ClearJson();
+        System.out.println("Ведется расчет кредитов ...");
+        for (int i = 0;i<1000;i++) //Запускаем 1000 потоков
         {   
             endCount = (i+1)*NumElem;
             if (endCount > lList) endCount = lList-1;
@@ -39,8 +38,9 @@ public class Controller //класс контроллер - приём запроса от пользователя;анали
             Callable task = () -> {return Model.getCrd(subList);};
             FutureTask <List<String>> future = new FutureTask<>(task);
             new Thread(future).start();
-            //dataListOut = future.get();
+            View.AddWriteJson(future.get());//Записываем результат расчета в json файл
         }
+        System.out.println("Результат записан в json файл");
         /*
         List<String> list1 = dataListIn.subList(0, NumElem); //первый лист
         List<String> list2 = dataListIn.subList(NumElem-1, 2*NumElem); //второй лист

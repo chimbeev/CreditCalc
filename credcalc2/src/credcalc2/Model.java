@@ -88,7 +88,7 @@ public class Model extends Thread {//Мodel - бизнес логика. В него передаем данн
                                 if (b==N) 
                                 {
                                     strCredOut.setLength(0);
-                                    strCredOutlist.set(h,strCredOutlist.get(h) + (strCredOut.append(" ").append(PaymentAll).append(" ").append(PercentAll)).toString());
+                                    strCredOutlist.set(h,strCredOutlist.get(h) + (strCredOut.append(" ").append(PaymentAll).append(" ").append(PercentAll).append("      ")).toString());
                                 }
                                 calndr1.add(Calendar.MONTH, 1); //дата следующего платежа по кредиту
                                 dt = calndr1.getTime(); 
@@ -119,7 +119,7 @@ public class Model extends Thread {//Мodel - бизнес логика. В него передаем данн
                                 if (i==N) 
                                 {
                                     strCredOut.setLength(0);
-                                    strCredOutlist.set(h,strCredOutlist.get(h) + (strCredOut.append(" ").append(PaymentAll).append(" ").append(PercentAll)).toString());
+                                    strCredOutlist.set(h,strCredOutlist.get(h) + (strCredOut.append(" ").append(PaymentAll).append(" ").append(PercentAll).append("      ")).toString());
                                 }
                                 calndr1.add(Calendar.MONTH, 1); //дата следующего платежа по кредиту
                                 dt = calndr1.getTime(); 
