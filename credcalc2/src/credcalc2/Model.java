@@ -1,6 +1,7 @@
 //-------------------------------------Model Begin----------------------------------------------------------------
 package credcalc2;
 
+import java.io.IOException;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -13,7 +14,7 @@ import java.util.logging.Logger;
 public class Model extends Thread {//Мodel - бизнес логика. В него передаем данные по кредиту для проведения расчета
  
     
-    public static List<String> getCrd(List<String> crd) 
+    public static List<String> getCrd(List<String> crd) throws IOException 
         
           {
                 //получив данные по кредиту в виде потока производим расчет графика платежей. После расчета возвращаем данные по кредиту в виде стрима
@@ -42,7 +43,8 @@ public class Model extends Thread {//Мodel - бизнес логика. В него передаем данн
                 df.setRoundingMode(RoundingMode.CEILING);
                 StringBuilder strCredOut = new StringBuilder(100_000);
                 for (int h = 0; h < crd.size()-1; h++) {
-                        if(crd.get(h)!=null) StrInArray=crd.get(h).split(";");
+                        //if(crd.get(h)!=null) StrInArray=crd.get(h).split(";");
+                        StrInArray=crd.get(h).split(";");
                         S=Integer.parseInt(StrInArray[1]);//сумма кредита
                         P=Double.parseDouble(StrInArray[2].replace(",",".")); //процент по кредиту, годовых
                         N=Integer.parseInt(StrInArray[5]); //срок кредита в месяцах
@@ -125,18 +127,21 @@ public class Model extends Thread {//Мodel - бизнес логика. В него передаем данн
                             }     
                         }
                         //System.out.println(h);
-                    };
+                    }
+                    
                return strCredOutlist;
                        
           }
+    public static void getTest(List<String> crd) 
+    {
+        for(int i=0;i<crd.size();i++)
+        {
+        System.out.println(crd.get(i));
+        } 
+     
+    }
 
-          public static List<String> getCrd2(List<String> crd2)
-          {
-               for (String value : crd2) {
-                    System.out.println(value + "dsdsd");
-               }
-               return null;
-          }
+          
   }
 
                               
