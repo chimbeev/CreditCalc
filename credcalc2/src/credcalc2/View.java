@@ -53,7 +53,7 @@ public class View //Представление получает данные из файла и отправляет в Model,
           {     
                 byte [] buffer = new byte[800000];
                 FileInputStream fis = null;
-                fis = new FileInputStream("input5.csv");
+                fis = new FileInputStream("input4.csv");
                 BufferedInputStream bis = new BufferedInputStream(fis);
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 String s = null; 
