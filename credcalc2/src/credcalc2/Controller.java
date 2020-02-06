@@ -35,24 +35,35 @@ public class Controller //класс контроллер - приём запроса от пользователя;анали
         View.ClearJson();
         System.out.println("Ведется расчет кредитов ...");
         //ArrayList<List<String>> a = new ArrayList<List<String>>();
-        /*
-        for (int i = 0;i<10;i++) //Запускаем 1000 потоков
-        {   
-            endCount = (i+1)*NumElem;
-            if (endCount > lList) endCount = lList-1;
-            List<String> subList = dataListIn.subList(i*NumElem, endCount);
-            Callable task = () -> {return Model.getCrd(subList);};
-            //FutureTask <List<String>> futur;
-            //futur = new FutureTask <List<String>> [100];
-            FutureTask <List<String>> future = new FutureTask<>(task);
-            Thread Thread1 = new Thread(future);
-            Thread1.start();
-            System.out.println("Запустили поток " + i);
+        
+        int i = 0; boolean exit = false;
+        do
+        {
+            if (i <= 10)
+            {
+                endCount = (i+1)*NumElem;
+                if (endCount > lList) endCount = lList-1;
+                List<String> subList = dataListIn.subList(i*NumElem, endCount);
+                Callable task = () -> {return Model.getCrd(subList);};
+                FutureTask <List<String>> future = new FutureTask<>(task);
+                Thread Thread1 = new Thread(future);
+                Thread1.start();
+                System.out.println("Запустили поток " + i);
+            }
+                if (future.isDone()) 
+            {
+                System.out.println("поток " + i + "завершен");
+                View.AddWriteJson(future.get());
+                System.out.println("Результат записан в json файл");
+            } else exit = true;
+            i = i + 1;
             //View.AddWriteJson(future.get());//Записываем результат расчета в json файл
             //System.out.println("Записали результаты в файл");
-        }
-        System.out.println("Результат записан в json файл");
-        **********************/
+        } while (exit = false);
+        
+        
+        //System.out.println("Результат записан в json файл");
+        /*
         List<String> subList = new ArrayList<>();
         Runnable[] runnables = new Runnable[100];
         //Thread[] ths = new Thread[5];
@@ -101,7 +112,7 @@ public class Controller //класс контроллер - приём запроса от пользователя;анали
         FutureTask <List<String>> future4 = new FutureTask<>(task4);
         new Thread(future4).start();
         View.ShowList(future4.get());*/
-    }
+    
         
         
         //List<String> dataListOut =  Model.getCrd(dataListIn); //передаем list с данными по кредитам и получаем результаты расчетов
@@ -118,7 +129,8 @@ public class Controller //класс контроллер - приём запроса от пользователя;анали
            
            
         
-       }    
+       }   
+}
 
    class ThExecute implements Runnable 
    {
