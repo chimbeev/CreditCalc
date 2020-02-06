@@ -128,7 +128,7 @@ public class Model extends Thread {//Мodel - бизнес логика. В него передаем данн
                         }
                         //System.out.println(h);
                     }
-                    
+               View.AddWriteJson(strCredOutlist);     
                return strCredOutlist;
                        
           }
