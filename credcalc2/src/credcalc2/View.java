@@ -9,6 +9,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -16,91 +18,116 @@ import java.util.stream.*;
 
 //----------------------------View Begin --------------------------------------
 public class View //Представление получает данные из файла и отправляет в Model, затем забирает из Model и выводит в файл и на экран
-     {    
-           public static List<String> ReadCrd() throws IOException//считывает из файла входные данные по кредитам
-          
-          {   
-                FileInputStream fis = null;
-                BufferedReader reader = null;
-                List<String> wordList = new ArrayList<String>();
-                try {
-                        fis = new FileInputStream("input3.csv");
-                        reader = new BufferedReader(new InputStreamReader(fis));
-                        String line = reader.readLine();
-                         
-                        while(line != null){
-                            //System.out.println(line);
-                            line = reader.readLine();
-                            wordList.add(line);
-                            
-                        }          
-                    } catch (IOException e) {e.printStackTrace();                 
-                    } finally {
-                        try {
-                            reader.close();
-                            fis.close();
-                            
-                        } catch (IOException e) { e.printStackTrace();}
-                            }
-                    return wordList;
-          }
-          
-          public static List<String> ReadCrd2() throws IOException//считывает из файла входные данные по кредитам быстрее
-          
-          {     
-                byte [] buffer = new byte[800000];
-                FileInputStream fis = null;
-                fis = new FileInputStream("input5.csv");
-                BufferedInputStream bis = new BufferedInputStream(fis);
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                String s = null; 
-                while (bis.read(buffer,0,buffer.length) > 0)
-                {
-                    baos.write(buffer);
-                    s = baos.toString("Cp1251"); //получили строку со всеми кредитами
-                    
-                }
-                String [] st; //поделили строку по кредитам
-                st = s.split("\n");
-                System.out.println("Read OK");
-                List<String> wordList = Arrays.asList(st);
-                System.out.println("List OK");
-                //System.out.println(wordList.size());
-                //System.out.println(wordList.get(90));
-                return wordList;
-          }
+{    
+        public static String GetCrdFromSrv(String crd) throws IOException //отправляет запрос на сервер с параметрами кредита и получает график платежей
+        {
+            String[] str1 = crd.split(";");
+            String url = "http://127.0.0.1:8080/?param1="+str1[0] +"&param2="+str1[1]+"&param3="+str1[2]+"&param4="+str1[3]+"&param5="+str1[4]+"&param6="+str1[5]+"&param7="+str1[5];
+            
+            URL obj = new URL(url);
+            String resStr = "";
+            HttpURLConnection connection = (HttpURLConnection) obj.openConnection();
 
-          public static void PrintToFile(List<String> stream) throws IOException//Записывает в файл расчитанные данные по кредитам
-          
-          {     String FILE_TO = "output3.csv";
-                File file = new File(FILE_TO);
-                try (FileOutputStream outputStream = new FileOutputStream(file)) 
-                {   String str = stream.toString();
-                    byte[] strToBytes = str.getBytes();
-                    outputStream.write(strToBytes);
-                    outputStream.close();
-                }
-           }
-          public static void ShowStream(Stream<String> stream) //показывает на экране стрим
-          {
-              stream.forEach(s -> System.out.println(s));
-          }
-          
-          public static void ShowList(List<String> list) //показывает на экране стрим
-          {
-              for (String e : list) {System.out.println(e);}  
-          }
+            connection.setRequestMethod("GET");
 
-    public static void WriteJson(List<String> stream) throws IOException 
-    { //Записывает в формате json файл расчитанные данные по кредитам 
-        String json = new Gson().toJson(stream);
-        String FILE_TO = "output3.json";
-        File file = new File(FILE_TO);
-        try (FileOutputStream outputStream = new FileOutputStream(file)) 
-        {   byte[] strToBytes = json.getBytes();
-            outputStream.write(strToBytes);
-            outputStream.close();
-        } catch (IOException e) { e.printStackTrace(); }
-    }
-     }
+            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            String inputLine;
+            StringBuffer response = new StringBuffer();
+
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+            in.close();
+
+            System.out.println(response.toString());
+            return resStr;
+        }
+    
+    
+        public static List<String> ReadCrd() throws IOException//считывает из файла входные данные по кредитам
+
+       {   
+             FileInputStream fis = null;
+             BufferedReader reader = null;
+             List<String> wordList = new ArrayList<String>();
+             try {
+                     fis = new FileInputStream("input3.csv");
+                     reader = new BufferedReader(new InputStreamReader(fis));
+                     String line = reader.readLine();
+
+                     while(line != null){
+                         //System.out.println(line);
+                         line = reader.readLine();
+                         wordList.add(line);
+
+                     }          
+                 } catch (IOException e) {e.printStackTrace();                 
+                 } finally {
+                     try {
+                         reader.close();
+                         fis.close();
+
+                     } catch (IOException e) { e.printStackTrace();}
+                         }
+                 return wordList;
+       }
+          
+        public static List<String> ReadCrd2() throws IOException//считывает из файла входные данные по кредитам быстрее
+
+        {     
+              byte [] buffer = new byte[800000];
+              FileInputStream fis = null;
+              fis = new FileInputStream("input5.csv");
+              BufferedInputStream bis = new BufferedInputStream(fis);
+              ByteArrayOutputStream baos = new ByteArrayOutputStream();
+              String s = null; 
+              while (bis.read(buffer,0,buffer.length) > 0)
+              {
+                  baos.write(buffer);
+                  s = baos.toString("Cp1251"); //получили строку со всеми кредитами
+
+              }
+              String [] st; //поделили строку по кредитам
+              st = s.split("\n");
+              System.out.println("Read OK");
+              List<String> wordList = Arrays.asList(st);
+              System.out.println("List OK");
+              //System.out.println(wordList.size());
+              //System.out.println(wordList.get(90));
+              return wordList;
+        }
+
+        public static void PrintToFile(List<String> stream) throws IOException//Записывает в файл расчитанные данные по кредитам
+
+        {     String FILE_TO = "output3.csv";
+              File file = new File(FILE_TO);
+              try (FileOutputStream outputStream = new FileOutputStream(file)) 
+              {   String str = stream.toString();
+                  byte[] strToBytes = str.getBytes();
+                  outputStream.write(strToBytes);
+                  outputStream.close();
+              }
+        }
+        public static void ShowStream(Stream<String> stream) //показывает на экране стрим
+        {
+            stream.forEach(s -> System.out.println(s));
+        }
+
+        public static void ShowList(List<String> list) //показывает на экране стрим
+        {
+            for (String e : list) {System.out.println(e);}  
+        }
+
+        public static void WriteJson(List<String> stream) throws IOException 
+        { //Записывает в формате json файл расчитанные данные по кредитам 
+            String json = new Gson().toJson(stream);
+            String FILE_TO = "output3.json";
+            File file = new File(FILE_TO);
+            try (FileOutputStream outputStream = new FileOutputStream(file)) 
+            {   byte[] strToBytes = json.getBytes();
+                outputStream.write(strToBytes);
+                outputStream.close();
+            } catch (IOException e) { e.printStackTrace(); }
+        }
+}
       //----------------------------View End----------------------------------------

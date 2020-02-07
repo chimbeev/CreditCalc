@@ -31,7 +31,7 @@ public class HTTPServer3
   }
 
   private static void handleRequest(HttpExchange exchange) throws IOException {
-      String response = "Hi there!";
+      String response = "Ответ сервера:";
       exchange.sendResponseHeaders(200, response.getBytes().length);//response code and length
       InputStream is=exchange.getRequestBody();
       OutputStream os = exchange.getResponseBody();
@@ -39,9 +39,10 @@ public class HTTPServer3
       os.close();
       String respo = exchange.getRequestURI().getQuery();
       Map<String, String> params = queryToMap(exchange.getRequestURI().getQuery()); 
-      System.out.println("param 1=" + params.get("param1"));
-      System.out.println("param 2=" + params.get("param2"));
-      System.out.println(respo);
+      System.out.println("поступили данные по кредиту " + respo);
+      System.out.println("ид клиента " + params.get("param1"));
+      System.out.println("сумма кредита " + params.get("param2"));
+      
   }
   //https://stackoverflow.com/questions/11640025/how-to-obtain-the-query-string-in-a-get-with-java-httpserver-httpexchange
   

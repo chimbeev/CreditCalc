@@ -11,6 +11,8 @@ import java.util.concurrent.FutureTask;
 
 public class Controller //класс контроллер - приём запроса от пользователя;анализ запроса; выбор следующего действия системы, соответственно результатам анализа 
 //(например, передача запроса другим элементам системы).
+//Отправляем на HTTPServer get запрос с параметрами кредита и получаем результаты расчета кредита
+
 {
     int id_client;
     int size;
@@ -25,6 +27,16 @@ public class Controller //класс контроллер - приём запроса от пользователя;анали
        {
         //List<String> dataListIn = View.ReadCrd(); //производим чтение из файла данных по кредитам и получаем данные в виде list
         List<String> dataListIn = View.ReadCrd2(); //производим чтение из файла данных по кредитам и получаем данные в виде list
+        //берем 10 кредитов и отправляем их на сервер для расчета 
+        String credStr = "";
+        HTTPServer3.main(args); //запускаем http сервер
+        for (int i = 10;i<21;i++)
+        {   
+            credStr = dataListIn.get(i);
+            System.out.println(credStr);
+            View.GetCrdFromSrv(credStr);
+        }
+        /*
         //View.ShowList(dataListIn);
         //List<String> dataListOut =  Model.getCrd(dataListIn);
         int lList = dataListIn.size(); //длина листа
@@ -41,7 +53,7 @@ public class Controller //класс контроллер - приём запроса от пользователя;анали
             new Thread(future).start();
             //dataListOut = future.get();
         }
-        /*
+        
         List<String> list1 = dataListIn.subList(0, NumElem); //первый лист
         List<String> list2 = dataListIn.subList(NumElem-1, 2*NumElem); //второй лист
         List<String> list3 = dataListIn.subList(2*NumElem-1, 3*NumElem); //третий лист
@@ -69,21 +81,24 @@ public class Controller //класс контроллер - приём запроса от пользователя;анали
         FutureTask <List<String>> future4 = new FutureTask<>(task4);
         new Thread(future4).start();
         View.ShowList(future4.get());*/
-    }
+    
         
         
         //List<String> dataListOut =  Model.getCrd(dataListIn); //передаем list с данными по кредитам и получаем результаты расчетов
         //View.ShowList(dataListOut);
         //View.PrintToFile(lineStreamOut); //записываем результаты в файл
         //View.WriteJson(dataListOut);
+        
         //HTTPServer3.main(args); //запускаем http сервер
         //ClientSocket2.main(args);//отправляем параметры кредита для расчета
+        
+        
         //SrvSocket srv = new SrvSocket();
         //Thread childThread = new Thread(srv);
         //childThread.start(); //стартовали сервер в отдельной нити
-          //ClientSocket.main(args);
+        //clientSocket.main(args);
         //Test1.main(args);
-           
+       }       
            
         
        }    
