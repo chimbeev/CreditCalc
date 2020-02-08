@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -19,13 +20,12 @@ import java.util.stream.*;
 //----------------------------View Begin --------------------------------------
 public class View //Представление получает данные из файла и отправляет в Model, затем забирает из Model и выводит в файл и на экран
 {    
-        public static String GetCrdFromSrv(String crd) throws IOException //отправляет запрос на сервер с параметрами кредита и получает график платежей
+        public static void GetCrdFromSrv(String crd) throws IOException //отправляет запрос на сервер с параметрами кредита и получает график платежей
         {
-            String[] str1 = crd.split(";");
-            String url = "http://127.0.0.1:8080/?param1="+str1[0] +"&param2="+str1[1]+"&param3="+str1[2]+"&param4="+str1[3]+"&param5="+str1[4]+"&param6="+str1[5]+"&param7="+str1[5];
+ 
+            String url = "http://127.0.0.1:8080/?" + URLEncoder.encode(crd, "UTF-8");
             
             URL obj = new URL(url);
-            String resStr = "";
             HttpURLConnection connection = (HttpURLConnection) obj.openConnection();
 
             connection.setRequestMethod("GET");
@@ -39,8 +39,6 @@ public class View //Представление получает данные из файла и отправляет в Model,
             }
             in.close();
 
-            System.out.println(response.toString());
-            return resStr;
         }
     
     
@@ -77,7 +75,7 @@ public class View //Представление получает данные из файла и отправляет в Model,
         {     
               byte [] buffer = new byte[800000];
               FileInputStream fis = null;
-              fis = new FileInputStream("input5.csv");
+              fis = new FileInputStream("input4.csv");
               BufferedInputStream bis = new BufferedInputStream(fis);
               ByteArrayOutputStream baos = new ByteArrayOutputStream();
               String s = null; 
@@ -89,7 +87,7 @@ public class View //Представление получает данные из файла и отправляет в Model,
               }
               String [] st; //поделили строку по кредитам
               st = s.split("\n");
-              System.out.println("Read OK");
+              System.out.println("Данные из файла прочитаны");
               List<String> wordList = Arrays.asList(st);
               System.out.println("List OK");
               //System.out.println(wordList.size());
@@ -113,15 +111,28 @@ public class View //Представление получает данные из файла и отправляет в Model,
             stream.forEach(s -> System.out.println(s));
         }
 
-        public static void ShowList(List<String> list) //показывает на экране стрим
+        public static void ShowList(List<String> list) //показывает на экране лист
         {
             for (String e : list) {System.out.println(e);}  
+            //System.out.println("Show list completed");
         }
 
         public static void WriteJson(List<String> stream) throws IOException 
         { //Записывает в формате json файл расчитанные данные по кредитам 
             String json = new Gson().toJson(stream);
             String FILE_TO = "output3.json";
+            File file = new File(FILE_TO);
+            try (FileOutputStream outputStream = new FileOutputStream(file)) 
+            {   byte[] strToBytes = json.getBytes();
+                outputStream.write(strToBytes);
+                outputStream.close();
+            } catch (IOException e) { e.printStackTrace(); }
+        }
+        
+        public static void WriteJson(List<String> stream, String fileName) throws IOException 
+        { //Записывает в формате json файл расчитанные данные по кредитам в указанный файл json
+            String json = new Gson().toJson(stream);
+            String FILE_TO = fileName + ".json";
             File file = new File(FILE_TO);
             try (FileOutputStream outputStream = new FileOutputStream(file)) 
             {   byte[] strToBytes = json.getBytes();

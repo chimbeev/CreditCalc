@@ -13,7 +13,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -39,20 +41,19 @@ public class HTTPServer3
       os.close();
       String respo = exchange.getRequestURI().getQuery();
       Map<String, String> params = queryToMap(exchange.getRequestURI().getQuery()); 
-      System.out.println("поступили данные по кредиту " + respo);
-      System.out.println("ид клиента " + params.get("param1"));
-      System.out.println("сумма кредита " + params.get("param2"));
+      System.out.println("Сервер : поступили данные по кредиту " + respo);
+      List<String> strCredOutlist = new ArrayList<>();
+      List<String> strCredlist = new ArrayList<>();
+      strCredOutlist.add(respo);
       
+      strCredlist = Model.getCrd(strCredOutlist);//передаем для расчета кредитов
+      System.out.println("Сервер : Результаты расчета:");
+      View.ShowList(strCredlist);
+      View.WriteJson(strCredlist, respo.substring(0, 2));
+      System.out.println("Сервер : Результаты расчета записаны в файл json");
+   
   }
-  //https://stackoverflow.com/questions/11640025/how-to-obtain-the-query-string-in-a-get-with-java-httpserver-httpexchange
   
-  private static void handleRequest2(HttpExchange exchange) throws IOException {
-      String response = "Hi there!";
-      exchange.sendResponseHeaders(200, response.getBytes().length);//response code and length
-      OutputStream os = exchange.getResponseBody();
-      os.write(response.getBytes());
-      os.close();
-  }
   public static Map<String, String> queryToMap(String query) 
       {
         Map<String, String> result = new HashMap<>();

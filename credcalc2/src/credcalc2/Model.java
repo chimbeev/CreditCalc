@@ -16,8 +16,8 @@ public class Model extends Thread {//Мodel - бизнес логика. В него передаем данн
     
     public static List<String> getCrd(List<String> crd) throws IOException 
         
-          {
-                //получив данные по кредиту в виде потока производим расчет графика платежей. После расчета возвращаем данные по кредиту в виде стрима
+          {     
+                //получив данные по кредиту в виде листа производим расчет графика платежей. После расчета возвращаем данные по кредиту в виде листа
                 List<String> strCredOutlist = new ArrayList<>();
                 String [] StrInArray = new String[7];
                 int S=0;//сумма кредита
@@ -42,7 +42,7 @@ public class Model extends Thread {//Мodel - бизнес логика. В него передаем данн
                 DecimalFormat df = new DecimalFormat("#.##");
                 df.setRoundingMode(RoundingMode.CEILING);
                 StringBuilder strCredOut = new StringBuilder(100_000);
-                for (int h = 0; h < crd.size()-1; h++) {
+                for (int h = 0; h <= crd.size()-1; h++) {
                         //if(crd.get(h)!=null) StrInArray=crd.get(h).split(";");
                         StrInArray=crd.get(h).split(";");
                         S=Integer.parseInt(StrInArray[1]);//сумма кредита
