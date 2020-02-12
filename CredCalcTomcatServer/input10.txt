@@ -1,0 +1,1 @@
+<h1>URI: /request.txt</h1><p>Accept=text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2</p><p>Connection=keep-alive</p><p>Host=localhost:8080</p><p>User-agent=Java/1.8.0_231</p>
