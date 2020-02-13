@@ -73,34 +73,10 @@ public class NewServlet extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response)
     throws IOException, ServletException
     {
-        response.setContentType("text/html;charset=UTF-8");
+        //response.setContentType("text/html;charset=UTF-8");
         
         response.setContentType("application/json; utf-8");
-        PrintWriter out = response.getWriter();
-        
-        //out.println("<html>");
-        //out.println("<body>");
-        //out.println("<head>");
-        //out.println("<title>Request Information Example</title>");
-        //out.println("</head>");
-        //out.println("<body>");
-        //out.println("<h3>Request Information Example</h3>");
-        //out.println("Method: " + request.getMethod());
-        //out.println("Request URI: " + request.getRequestURI());
-        //out.println("Protocol: " + request.getProtocol());
-        //out.println("PathInfo: " + request.getPathInfo());
-        //out.println("Remote Address: " + request.getRemoteAddr());
-        out.println("Params " + request.getParameter("Param1")); 
-        /*
-        URL url = new URL ("https://reqres.in/api/users");
-        HttpURLConnection con = (HttpURLConnection)url.openConnection();
-        con.setRequestMethod("POST");
-        con.setRequestProperty("Content-Type", "application/json; utf-8");
-        con.setRequestProperty("Accept", "application/json");
-        con.setDoOutput(true);
-        //String jsonInputString = {"name": "Upendra", "job": "Programmer"};
-        String message;
-        */
+       
         JSONObject json = new JSONObject();
         json.put("name", "student");
 
