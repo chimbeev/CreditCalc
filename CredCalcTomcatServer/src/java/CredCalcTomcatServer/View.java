@@ -10,6 +10,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import static java.net.Proxy.Type.HTTP;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -22,12 +23,10 @@ public class View //ѕредставление получает данные из файла и отправл€ет в Model,
 {    
         public static void GetCrdFromSrv(String crd) throws IOException //отправл€ет запрос на сервер с параметрами кредита и получает график платежей
         {
-            System.out.println(URLEncoder.encode(crd, "UTF-8"));
-            String url = "http://localhost:8080/CredCalcTomcatServer/NewServlet/?Param1=" + URLEncoder.encode(crd, "Cp1251");
-            //http://localhost:8080/CredCalcTomcatServer/?Param1
-            //String url = "http://localhost:8080/CredCalcTomcatServer/NewServlet/?Param1=" + crd.substring(0, crd.length()-1);
-            //String url = "http://localhost:8080/CredCalcTomcatServer/NewServlet/?Param1=" + URLEncoder.encode("gfggfcrd€ч€ч„яя","utf-8");
-            
+            System.out.println(crd);
+            //System.out.println(URLEncoder.encode(crd, "UTF-8"));
+                      
+            String url = "http://localhost:8080/CredCalcTomcatServer/NewServlet/?Param1=" + URLEncoder.encode(crd, java.nio.charset.StandardCharsets.UTF_8.toString());
             URL obj = new URL(url);
             HttpURLConnection connection = (HttpURLConnection) obj.openConnection();
 
@@ -41,7 +40,7 @@ public class View //ѕредставление получает данные из файла и отправл€ет в Model,
                 response.append(inputLine);
             }
             in.close();
-            System.out.println(response);
+            System.out.println(response); //выводит ответ вебсервера
         }
     
     
