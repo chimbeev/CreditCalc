@@ -24,7 +24,7 @@ public class View //Представление получает данные из файла и отправляет в Model,
         public static void GetCrdFromSrv(String crd) throws IOException //отправляет запрос на сервер с параметрами кредита и получает график платежей
         {
             System.out.println(crd);
-            //System.out.println(URLEncoder.encode(crd, "UTF-8"));
+            System.out.println(URLEncoder.encode(crd, "UTF-8"));
                       
             String url = "http://localhost:8080/CredCalcTomcatServer/NewServlet/?Param1=" + URLEncoder.encode(crd, java.nio.charset.StandardCharsets.UTF_8.toString());
             URL obj = new URL(url);
@@ -40,7 +40,7 @@ public class View //Представление получает данные из файла и отправляет в Model,
                 response.append(inputLine);
             }
             in.close();
-            System.out.println(response); //выводит ответ вебсервера
+            System.out.println(response);
         }
     
     

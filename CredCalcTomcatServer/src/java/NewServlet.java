@@ -4,6 +4,8 @@
  * and open the template in the editor.
  */
 
+import CredCalcTomcatServer.Model;
+import CredCalcTomcatServer.View;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -22,7 +24,6 @@ import javax.servlet.http.HttpServletResponse;
 import static org.eclipse.jdt.internal.compiler.parser.Parser.name;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONArray;
-
 
 /**
  *
@@ -47,7 +48,7 @@ public class NewServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet NewServlet</title>");            
+            out.println("<title>Servlet NewServlet</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet NewServlet at " + request.getContextPath() + "</h1>");
@@ -71,23 +72,28 @@ public class NewServlet extends HttpServlet {
         processRequest(request, response);
     }*/
     public void doGet(HttpServletRequest request, HttpServletResponse response)
-    throws IOException, ServletException
-    {
+            throws IOException, ServletException {
         //read input
+        request.getRemoteUser();
+        //request.getQueryString();
+        String sl = request.getQueryString();
         response.setContentType("text/html");
+        response.setCharacterEncoding("Cp1251");
         PrintWriter out = response.getWriter();
+        
         out.println("Method: " + request.getMethod());
-        out.println("Input data: " + request.getParameter("Param1"));
-        System.out.println("Сервер : поступили данные по кредиту " + request.getParameter("Param1"));
+        out.println(" Input data: " + sl);
+        //System.out.println("Сервер : поступили данные по кредиту " + respo);
         List<String> strCredOutlist = new ArrayList<>();
         List<String> strCredlist = new ArrayList<>();
-        strCredOutlist.add(respo);
+        out.println(sl.substring(7));
+        strCredOutlist.add(sl.substring(7));
 
         strCredlist = Model.getCrd(strCredOutlist);//передаем для расчета кредитов
-        System.out.println("Сервер : Результаты расчета:");
-        View.ShowList(strCredlist);
-        View.WriteJson(strCredlist, respo.substring(0, 2));
-        System.out.println("Сервер : Результаты расчета записаны в файл json");
+        out.println("Сервер : Результаты расчета:");
+        //View.ShowList(strCredlist);
+        //View.WriteJson(strCredlist, respo.substring(0, 2));
+        out.println("Сервер : Результаты расчета записаны в файл json");
         /*
         response.setContentType("application/json; utf-8");
        
@@ -123,7 +129,7 @@ public class NewServlet extends HttpServlet {
         }
         
         
-        */
+         */
         //out.println("</body>");
         //out.println("</html>");
     }
