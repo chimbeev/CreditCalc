@@ -29,15 +29,16 @@ public class Controller //класс контроллер - приём запроса от пользователя;анали
 
             //берем 10 кредитов и отправляем их на сервер для расчета 
             String credStr = "";
-            //HTTPServer3.main(args); //запускаем http сервер
             for (int i = 10;i<21;i++)
             {   
                 credStr = dataListIn.get(i);
-                View.GetCrdFromSrv(credStr); //отправляем на сервер строку с параметрами кредита
+                System.out.println(credStr);
+                String str = View.GetCrdFromSrv(credStr); //отправляем на сервер строку с параметрами кредита и получаем результаты
+                View.WriteJson(str, i+".json");//Запиcываем в файл json
+               
             }
         
        }       
-           
         
 }    
 

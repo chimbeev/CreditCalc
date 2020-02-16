@@ -7,26 +7,22 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import static java.net.Proxy.Type.HTTP;
 import java.net.URL;
-import java.net.URLEncoder;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.*;
 
+
 //----------------------------View Begin --------------------------------------
 public class View //Представление получает данные из файла и отправляет в Model, затем забирает из Model и выводит в файл и на экран
 {    
-        public static void GetCrdFromSrv(String crd) throws IOException //отправляет запрос на сервер с параметрами кредита и получает график платежей
+        public static String GetCrdFromSrv(String crd) throws IOException //отправляет запрос на сервер с параметрами кредита и получает график платежей
         {
-            System.out.println(crd);
-            System.out.println(URLEncoder.encode(crd, "UTF-8"));
-                      
-            String url = "http://localhost:8080/CredCalcTomcatServer/NewServlet/?Param1=" + URLEncoder.encode(crd, java.nio.charset.StandardCharsets.UTF_8.toString());
+            String url = "http://localhost:8080/CredCalcTomcatServer/NewServlet/?Param1=" + crd;
             URL obj = new URL(url);
             HttpURLConnection connection = (HttpURLConnection) obj.openConnection();
 
@@ -35,42 +31,18 @@ public class View //Представление получает данные из файла и отправляет в Model,
             BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             String inputLine;
             StringBuffer response = new StringBuffer();
-
+            
             while ((inputLine = in.readLine()) != null) {
                 response.append(inputLine);
             }
             in.close();
             System.out.println(response);
+            return response.toString();
+            
+            
         }
     
-    
-        public static List<String> ReadCrd() throws IOException//считывает из файла входные данные по кредитам
-
-       {   
-             FileInputStream fis = null;
-             BufferedReader reader = null;
-             List<String> wordList = new ArrayList<String>();
-             try {
-                     fis = new FileInputStream("input3.csv");
-                     reader = new BufferedReader(new InputStreamReader(fis));
-                     String line = reader.readLine();
-
-                     while(line != null){
-                         //System.out.println(line);
-                         line = reader.readLine();
-                         wordList.add(line);
-
-                     }          
-                 } catch (IOException e) {e.printStackTrace();                 
-                 } finally {
-                     try {
-                         reader.close();
-                         fis.close();
-
-                     } catch (IOException e) { e.printStackTrace();}
-                         }
-                 return wordList;
-       }
+       
           
         public static List<String> ReadCrd2() throws IOException//считывает из файла входные данные по кредитам быстрее
 
@@ -141,6 +113,15 @@ public class View //Представление получает данные из файла и отправляет в Model,
                 outputStream.write(strToBytes);
                 outputStream.close();
             } catch (IOException e) { e.printStackTrace(); }
+        }
+        
+        public static void WriteJson(String st, String fileName) throws IOException 
+        { //Записывает в файл расчитанные данные по кредитам в указанный файл json
+            String jsonStr = "";
+            jsonStr = new Gson().toJson(st);
+            FileWriter file = new FileWriter(fileName);
+            file.write(jsonStr);
+            file.close();
         }
 }
       //----------------------------View End----------------------------------------

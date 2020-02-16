@@ -1,5 +1,7 @@
-//-------------------------------------Model Begin----------------------------------------------------------------
 package CredCalcTomcatServer;
+
+//-------------------------------------Model Begin----------------------------------------------------------------
+
 
 import java.io.IOException;
 import java.math.RoundingMode;
@@ -19,7 +21,7 @@ public class Model extends Thread {//Мodel - бизнес логика. В него передаем данн
           {     
                 //получив данные по кредиту в виде листа производим расчет графика платежей. После расчета возвращаем данные по кредиту в виде листа
                 List<String> strCredOutlist = new ArrayList<>();
-                String [] StrInArray = new String[7];
+                String [] StrInArray = new String[9];
                 int S=0;//сумма кредита
                 double P=0; //процент по кредиту, годовых
                 int N=0; //срок кредита в месяцах
@@ -39,14 +41,23 @@ public class Model extends Thread {//Мodel - бизнес логика. В него передаем данн
                 String formattedDate = "";
                 int b = 0;
                 int i = 0;
+                System.out.println(crd.size());
+                System.out.println(crd.get(0));
                 DecimalFormat df = new DecimalFormat("#.##");
                 df.setRoundingMode(RoundingMode.CEILING);
                 StringBuilder strCredOut = new StringBuilder(100_000);
-                for (int h = 0; h <= crd.size()-1; h++) {
-                        //if(crd.get(h)!=null) StrInArray=crd.get(h).split(";");
-                        StrInArray=crd.get(h).split(";");
+                for (int h = 0; h < crd.size(); h++) {
+                        if(crd.get(h)!=null) StrInArray=crd.get(h).split(";");
+                        //StrInArray=crd.get(h).split(";");
+                        
                         S=Integer.parseInt(StrInArray[1]);//сумма кредита
                         P=Double.parseDouble(StrInArray[2].replace(",",".")); //процент по кредиту, годовых
+                        System.out.println(StrInArray[0]);
+                        System.out.println(StrInArray[1]);
+                        System.out.println(StrInArray[2]);
+                        System.out.println(StrInArray[3]);
+                        System.out.println(StrInArray[4]);
+                        System.out.println(StrInArray[5]);
                         N=Integer.parseInt(StrInArray[5]); //срок кредита в месяцах
                         Rem = S; //остаток задолженности по кредиту
                         Payment = 0; //сумма аннуитетного платежа
@@ -66,7 +77,7 @@ public class Model extends Thread {//Мodel - бизнес логика. В него передаем данн
                         calndr1.setTime(date); //преобразуем строку с датой в обьект календарь
                         dt = calndr1.getTime(); 
                         formattedDate = sdf.format(dt);                       
-                        if (StrInArray[4].charAt(0) == 'А') //если тип платежа аннуитетный
+                        if (StrInArray[4].charAt(0) == 'A') //если тип платежа аннуитетный
                         /* (ежемесячная сумма выплаты не меняется, но с каждым месяцем в этой сумме содержится больше выплат основного долга по кредиту и меньше процентных выплат)
                             Вычисление суммы аннуитетного платежа производится по формуле:
                             Payment = S*(p+(p/((1+p)^N-1)) , где p – это нормализованная месячная процентная ставка (p = P / 100 / 12).
@@ -95,7 +106,7 @@ public class Model extends Thread {//Мodel - бизнес логика. В него передаем данн
                                 formattedDate = sdf.format(dt);
                             }     
                         }
-                        else if (StrInArray[4].charAt(0) == 'Д') //если тип платежа дифференцированный
+                        else if (StrInArray[4].charAt(0) == 'D') //если тип платежа дифференцированный
                         {   /*Схема оплаты по дифференцированному платежу выглядит следующим образом:
                             Условие: сумма кредита — 300 000 рублей, срок кредита — 6 месяцев, ставка по кредиту — 20%. Погашение кредита осуществляется дифференцированными платежами:
                             1. Ежемесячный платеж по основному долгу = сумма кредита / количество платежных периодов в течение всего срока кредита.

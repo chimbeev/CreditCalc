@@ -5,25 +5,18 @@
  */
 
 import CredCalcTomcatServer.Model;
-import CredCalcTomcatServer.View;
-import java.io.BufferedReader;
+import com.google.gson.Gson;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import static org.eclipse.jdt.internal.compiler.parser.Parser.name;
 import org.json.simple.JSONObject;
-import org.json.simple.JSONArray;
+
 
 /**
  *
@@ -74,41 +67,29 @@ public class NewServlet extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
         //read input
-        request.getRemoteUser();
-        //request.getQueryString();
         String sl = request.getQueryString();
-        response.setContentType("text/html");
-        response.setCharacterEncoding("Cp1251");
-        PrintWriter out = response.getWriter();
+        //response.setContentType("text/html");
+        //response.setCharacterEncoding("Cp1251");
+        //PrintWriter out = response.getWriter();
         
-        out.println("Method: " + request.getMethod());
-        out.println(" Input data: " + sl);
-        //System.out.println("Сервер : поступили данные по кредиту " + respo);
+        //out.println(" Сервер - входные данные: " + sl);
+       
         List<String> strCredOutlist = new ArrayList<>();
         List<String> strCredlist = new ArrayList<>();
-        out.println(sl.substring(7));
+        System.out.println(sl.substring(7));
         strCredOutlist.add(sl.substring(7));
-
+        String jsonStr = "";
         strCredlist = Model.getCrd(strCredOutlist);//передаем для расчета кредитов
-        out.println("Сервер : Результаты расчета:");
-        //View.ShowList(strCredlist);
-        //View.WriteJson(strCredlist, respo.substring(0, 2));
-        out.println("Сервер : Результаты расчета записаны в файл json");
-        /*
-        response.setContentType("application/json; utf-8");
-       
+        //out.println(" Сервер - результаты расчета:");
+        for(int i=0;i<strCredlist.size();i++)
+        {
+            //out.println(strCredlist.get(i));
+            jsonStr = new Gson().toJson(strCredlist.get(i));
+        } 
+  
         JSONObject json = new JSONObject();
-        json.put("name", "student");
-
-        JSONArray array = new JSONArray();
-        JSONObject item = new JSONObject();
-        item.put("information", "test");
-        item.put("id", 3);
-        item.put("name", "course1");
-        array.add(item);
-
-        json.put("course", array);
-        //OutputStream os = new OutputStream();
+        json.put("credit",jsonStr);
+        
         String jsonInputString = json.toString();
         
         try(OutputStream os = response.getOutputStream()) 
@@ -116,22 +97,7 @@ public class NewServlet extends HttpServlet {
             byte[] input = jsonInputString.getBytes("utf-8");
             os.write(input, 0, input.length);           
         }
-        /*read response
-        try(BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), "utf-8"))) 
-        {
-            StringBuilder response1 = new StringBuilder();
-            String responseLine = null;
-            while ((responseLine = br.readLine()) != null) 
-            {
-                response1.append(responseLine.trim());
-            }
-            System.out.println(response1.toString());
-        }
-        
-        
-         */
-        //out.println("</body>");
-        //out.println("</html>");
+
     }
 
     /**
